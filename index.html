@@ -359,10 +359,10 @@ td.p.ant{color:var(--muted);font-weight:500}
 </div>
 
 <div class="tabs"><nav aria-label="Secciones">
+  <a href="#gastos" data-tab="gastos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 3.5V8M19.4 16.2l-4-2.1"/></svg>Gastos</a>
   <a href="#lista" data-tab="lista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2"/><circle cx="5" cy="18" r="1.2"/></svg>Lista</a>
   <a href="#compras" data-tab="compras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5L6 21z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>Compras</a>
   <a href="#precios" data-tab="precios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Precios</a>
-  <a href="#gastos" data-tab="gastos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 3.5V8M19.4 16.2l-4-2.1"/></svg>Gastos</a>
 </nav></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -767,7 +767,8 @@ function vistaGastos(){
   const r=resumen(S.mes);
   if(S.gSel&&!(r.porCat[S.gSel]>0))S.gSel=null;
   top.innerHTML=`<div class="anillo-card">${anilloHTML(r)}${saldoHTML(r)}</div>`;
-  rest.innerHTML=catsHTML(r)+movsHTML(r)+dolarHTML(r)+subsHTML(r);
+  const vacio=STANDALONE&&!S.lista.length&&!S.compras.length&&!S.gastos.length&&!S.subs.length;
+  rest.innerHTML=(vacio?`<div class="vacio"><h3>¿Tenés una copia de tus datos?</h3><p>Cargala acá y aparece todo lo que tenías: lista, compras, gastos y suscripciones.</p><label class="btn archivo">Cargar copia de mis datos<input class="imp-file" id="imp-file-gastos" type="file" accept="application/json,.json"></label></div>`:"")+catsHTML(r)+movsHTML(r)+dolarHTML(r)+subsHTML(r);
   if(S.gf&&$("#g-form").hidden)renderGForm();
 }
 function convTxt(){const f=S.gf;if(!f)return "";const cz=cotizDe(fechaOk(f.fecha)?mesDe(f.fecha):S.mes),v=num(f.monto);
@@ -1226,7 +1227,7 @@ function parsearTicket(texto,previos){
 /*PARSER-END*/
 
 /* ---------- rutas y arranque ---------- */
-function ruta(){const h=location.hash.replace("#","");S.view=["lista","compras","precios","gastos"].includes(h)?h:"lista";}
+function ruta(){const h=location.hash.replace("#","");S.view=["lista","compras","precios","gastos"].includes(h)?h:"gastos";}
 window.addEventListener("hashchange",()=>{ruta();render();window.scrollTo(0,0);});
 
 $("#fc-fecha").value=hoy();nuevaLinea();nuevaLinea();
