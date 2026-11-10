@@ -7,14 +7,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Changuito">
+<meta name="apple-mobile-web-app-title" content="Control de Gastos">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
-<title>Changuito del Mes</title>
+<title>Control de Gastos</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -270,7 +270,7 @@ td.p.ant{color:var(--muted);font-weight:500}
 <div class="wrap">
   <header class="top">
     <div class="eyebrow">Santa Cruz · para dos</div>
-    <h1>Changuito del Mes</h1>
+    <h1>Control de Gastos</h1>
     <div class="mesbar">
       <button id="mes-ant" type="button" aria-label="Mes anterior">‹</button>
       <span class="mes" id="mes-label">Noviembre 2026</span>
@@ -1154,16 +1154,16 @@ function crearDBLocal(){
 }
 function exportarCopia(){
   if(!db||!db.exportar)return;
-  const nombre="changuito-"+hoy()+".json";
+  const nombre="control-de-gastos-"+hoy()+".json";
   const blob=new Blob([JSON.stringify({app:"changuito",v:1,fecha:hoy(),datos:db.exportar()})],{type:"application/json"});
   let file=null;try{file=new File([blob],nombre,{type:"application/json"});}catch(e){}
-  if(file&&navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:"Copia de Changuito"}).catch(()=>{});return;}
+  if(file&&navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:"Copia de Control de Gastos"}).catch(()=>{});return;}
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nombre;document.body.appendChild(a);a.click();
   setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);
 }
 async function leerCopia(file){
   let obj=null;try{obj=JSON.parse(await file.text());}catch(e){obj=null;}
-  if(!obj||obj.app!=="changuito"||!obj.datos||typeof obj.datos!=="object"){toast("Ese archivo no es una copia de Changuito.");return;}
+  if(!obj||obj.app!=="changuito"||!obj.datos||typeof obj.datos!=="object"){toast("Ese archivo no es una copia de Control de Gastos.");return;}
   if(!S.lista.length&&!S.compras.length&&!S.gastos.length&&!S.subs.length){aplicarCopia(obj);return;}
   S.copiaPend=obj;mostrarConfCopia();$("#imp-conf").scrollIntoView({behavior:suave(),block:"center"});
 }
